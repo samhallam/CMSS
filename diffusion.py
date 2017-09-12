@@ -3,14 +3,15 @@ import matplotlib.pyplot as plt # plotting library
 
 # derived quantities
 
-nt = 100
+nt = 40
 nx = 100   # number of points in space
 u = 1.
 dx = 1./nx
-dt = 1
-t = nt * dt
-k= 1*10**(-5) # diffusion coefficient
+k= 0.00001 # diffusion coefficient
+
+dt = 0.5*dx**2/k
 d= k*dt/dx**2
+print d
 # Function defining the initial and analytical solution
 
 def initialBell(x):
@@ -44,7 +45,7 @@ phi[nx] = phi[0]
 
 # Loop over remaining time-steps (nt) using CTCS
 
-nt = 20
+
 
 for n in xrange (1, nt):
     # loop over space
@@ -54,7 +55,6 @@ for n in xrange (1, nt):
 
     phiNew[0] = phiOld[0] + d*(phi[1] + phi[nx-1] -2*phi[0])
     phiNew[nx] = phiNew[0]
-
     #update phi for the next time-step
     phiOld = phi.copy()
     phi = phiNew.copy()
@@ -63,7 +63,7 @@ for n in xrange (1, nt):
 
 # Plot the solution in comparison to the analytic solution
 
-plt.plot(x, initialBell(x - u*t), 'k' , label = 'analytic')
+plt.plot(x, initialBell(x), 'k' , label = 'analytic')
 plt.plot(x,phi, 'b', label='CTCS')
 plt.legend(loc='best')
 plt.xlabel('x')
